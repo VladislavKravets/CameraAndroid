@@ -25,9 +25,12 @@ class ImageSaver implements Runnable {
      */
     private final File mFile;
 
-    ImageSaver(Image image, File file) {
+    private final String mCameraId;
+
+    ImageSaver(Image image, File file, String cameraId) {
         mImage = image;
         mFile = file;
+        mCameraId = cameraId;
     }
 
     @Override
@@ -39,7 +42,11 @@ class ImageSaver implements Runnable {
         try {
             output = new FileOutputStream(mFile + "/" + getNowDate() + ".jpg");
             Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-            output.write(rotateToDegrees(bmp,90));
+            System.out.println(mCameraId);
+            if(mCameraId.equals("1"))
+                output.write(rotateToDegrees(bmp,-90));
+            if(mCameraId.equals("0"))
+                output.write(rotateToDegrees(bmp,90));
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
